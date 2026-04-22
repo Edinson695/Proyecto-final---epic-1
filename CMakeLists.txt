@@ -19,7 +19,7 @@ file(GLOB source_files
 
 add_executable(${PROJECT_NAME}
         ${source_files}
-    )
+     "src/shape.cpp")
 
 find_package(Eigen3 QUIET NO_MODULE)
 
