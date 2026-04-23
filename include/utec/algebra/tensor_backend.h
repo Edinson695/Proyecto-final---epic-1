@@ -66,6 +66,14 @@ namespace utec::tf {
         out.data_.setZero();
         return out;
     }
+
+    template<typename T>
+    Tensor<T> Tensor<T>::ones(const Shape &shape) {
+        Tensor<T> out(shape);
+        out.data_.setOnes();
+        return out;
+    }
+
     template <typename T>
     template <typename... Ix>
     T& Tensor<T>::operator()(Ix... indices) {
