@@ -19,15 +19,16 @@ file(GLOB source_files
 
 add_executable(${PROJECT_NAME}
         ${source_files}
-     "src/shape.cpp")
+     "src/shape.cpp"
+        src/tensor.cpp)
 
 find_package(Eigen3 QUIET NO_MODULE)
 
 if(TARGET Eigen3::Eigen)
     target_link_libraries(${PROJECT_NAME} PRIVATE Eigen3::Eigen)
-elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/eigen/Eigen")
+elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/eigen-3.4.0/Eigen")
     target_include_directories(${PROJECT_NAME} PRIVATE
-            "${CMAKE_CURRENT_SOURCE_DIR}/third_party/eigen")
+            "${CMAKE_CURRENT_SOURCE_DIR}/third_party/eigen-3.4.0")
 else()
     message(WARNING "Eigen3 was not found. Install it system-wide or vendor it in third_party/eigen-3.4.0.")
 endif()
