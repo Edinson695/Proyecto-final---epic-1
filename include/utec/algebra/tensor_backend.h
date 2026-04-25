@@ -19,29 +19,52 @@ namespace utec::tf {
         Tensor() = default;
         explicit Tensor(const Shape& shape);
         Tensor(const Shape& shape, const std::vector<T>& values);
+
         static Tensor zeros(const Shape& shape);
         static Tensor ones(const Shape& shape);
         static Tensor from_data(const Shape& shape, const std::vector<T>& values);
+
+        // --- Question #4: Declaraciones ---
         [[nodiscard]] const Shape& shape() const noexcept;
         [[nodiscard]] std::size_t rank() const noexcept;
         [[nodiscard]] std::size_t numel() const noexcept;
+
         template <typename... Ix>
         T& operator()(Ix... indices);
         template <typename... Ix>
         const T& operator()(Ix... indices) const;
+
         Tensor reshape(const Shape& new_shape) const;
         Tensor operator+(const Tensor& other) const;
+
     private:
         Shape shape_;
         Eigen::Array<T, Eigen::Dynamic, 1> data_;
         [[nodiscard]] std::size_t flat_index(std::span<const int> indices) const;
     };
 
+
     template <typename T>
     Tensor<T>::Tensor(const Shape& shape)
     : shape_(shape), data_(static_cast<Eigen::Index>(shape.numel())) {
         data_.setZero();
     }
+
+    template <typename T>
+    const Shape& Tensor<T>::shape() const noexcept {
+        return shape_;
+    }
+
+    template <typename T>
+    std::size_t Tensor<T>::rank() const noexcept {
+        return shape_.rank(); // Delega a la clase Shape
+    }
+
+    template <typename T>
+    std::size_t Tensor<T>::numel() const noexcept {
+        return shape_.numel(); // Delega a la clase Shape
+    }
+
     template <typename T>
     std::size_t Tensor<T>::flat_index(std::span<const int> indices) const {
         if (indices.size() != shape_.rank()) {
@@ -60,6 +83,7 @@ namespace utec::tf {
         }
         return flat;
     }
+
     template <typename T>
     Tensor<T> Tensor<T>::zeros(const Shape& shape) {
         Tensor<T> out(shape);
@@ -89,7 +113,6 @@ namespace utec::tf {
         return data_(static_cast<Eigen::Index>(
             flat_index(std::span<const int>(idx, sizeof...(indices)))));
     }
-
 }
 
 
